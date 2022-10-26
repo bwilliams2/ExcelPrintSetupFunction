@@ -25,8 +25,11 @@ namespace AzureFormRecognizer.Preparation
             string connectionString = Environment.GetEnvironmentVariable("StorageAccountConnectionString");
 
             // Check for container name in query or use environmental variable
-            string containerName = req.Query["container"];
-            containerName = containerName ?? Environment.GetEnvironmentVariable("BlobContainer");
+            string srcContainerName = req.Query["sourceContainer"];
+            srcContainerName = srcContainerName ?? Environment.GetEnvironmentVariable("SourceBlobContainer");
+            
+            string destContainerName = req.Query["destinationContainer"];
+            destContainerName = destContainerName ?? Environment.GetEnvironmentVariable("DestinationBlobContainer");
 
             // Get blob filepath (does not include container)
             string name = req.Query["blobName"];
@@ -34,8 +37,8 @@ namespace AzureFormRecognizer.Preparation
             string responseMessage;
             try {
                 // Connect to blob storage
-                BlobContainerClient container = new BlobContainerClient(connectionString, containerName);
-                var blob = container.GetBlobClient(name);
+                BlobContainerClient srcContainer = new BlobContainerClient(connectionString, srcContainerName);
+                var blob = srcContainer.GetBlobClient(name);
 
                 IWorkbook wb;
                 using (MemoryStream memoryStream = new MemoryStream()) {
@@ -58,11 +61,14 @@ namespace AzureFormRecognizer.Preparation
                     sheet.PrintSetup.FitWidth = 1; // 
                     sheet.PrintSetup.FitHeight = 0; // 
                 }
+                
+                BlobContainerClient destContainer = new BlobContainerClient(connectionString, destContainerName);
+                var destBlob = destContainer.GetBlobClient(name);
 
                 using (MemoryStream outputMemoryStream = new MemoryStream()) {
                     wb.Write(outputMemoryStream, true);
                     outputMemoryStream.Position = 0;
-                    await blob.UploadAsync(outputMemoryStream, true);
+                    await destBlob.UploadAsync(outputMemoryStream, true);
                 }
                 
                 responseMessage = $"File was successfully processed";
