@@ -155,10 +155,6 @@
               "value": "~4"
             },
             {
-              "name": "WEBSITE_NODE_DEFAULT_VERSION",
-              "value": "~10"
-            },
-            {
                 "name": "StorageAccountConnectionString",
                 "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', variables('documentStorageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('documentStorageAccountName')), '2021-08-01').keys[0].value)]"
             },
