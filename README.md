@@ -14,7 +14,7 @@ The configuration changes to improve PDF export formatting are:
 - Conversion to landscape orientation
 - Full-width scaling (i.e. "Fit All Columns on One Page")
 
-This Azure Function is intended for use within a complete automation solution leveraging an Azure Logic App for orchestration and Azure Form Recognizer for data extraction. A simplified infrastructure diagram of such a solution is shown below.
+This Azure Function is intended for use within a complete automation solution leveraging an Azure Logic App for orchestration and Azure Form Recognizer for data extraction. A simplified infrastructure diagram of such a a solution is shown below.
 
 ![Infrastructure Map](/images/infra.png)
 
